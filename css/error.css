@@ -1,0 +1,31 @@
+@charset "UTF-8";
+body {
+  background: #fff;
+  font-family: '微软雅黑';
+  color: #333;
+  font-size: 16px; }
+
+.error {
+  padding: 24px 48px; }
+  .error .face {
+    font-size: 70px;
+    font-weight: normal; }
+  .error .message {
+    font-size: 32px;
+    margin-bottom: 15px;
+    margin-top: 12px; }
+  .error .content .info {
+    margin-bottom: 12px; }
+    .error .content .info h3.title {
+      color: #000;
+      font-weight: 700;
+      font-size: 16px; }
+
+.copyright {
+  padding: 12px 48px;
+  color: #999; }
+  .copyright a {
+    color: #000;
+    text-decoration: none; }
+
+/*# sourceMappingURL=error.css.map */

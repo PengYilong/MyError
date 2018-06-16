@@ -1,0 +1,20 @@
+{
+    "name": "nezumi/myerror",
+    "description": "php error and exception",
+    "require": {
+		"php": ">=5.4"
+    },
+    "authors": [
+        {
+            "name": "Yilong Peng",
+            "homepage": "https://github.com/PengYilong",
+            "email": "948800401@qq.com",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Nezumi\\": "src/"
+        }
+    }
+}
