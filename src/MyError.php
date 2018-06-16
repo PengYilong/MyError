@@ -1,14 +1,14 @@
 <?php
 namespace Nezumi;
-use Exeception;
+use Exception;
 
 class MyError
 {
 
 	/**
-	 * @var int 1 debug on or 0 debug off 
+	 * @var boolean true debug on or flase debug off 
 	 */
-	public $debug = '1';
+	public $debug = true;
 
 	/**
 	 * @var string 
@@ -20,17 +20,26 @@ class MyError
 	 */
 	protected $log;
 
-	public function __construct($path, $rule, $file = './template/error.php')
+	public function __construct($path, $rule, $file = './template/error.php', $debug = 1)
 	{
 		$this->file = $file;
-		/**
-		 * E_WARNING
-		 * 
-		 */
-		set_error_handler([$this, 'customError']);
-		set_exception_handler([$this, 'customException']);
-		register_shutdown_function([$this, 'parseError']);
-		$this->log = new Log($path, $rule);		
+		try{
+			if( !file_exists($file) ){
+				throw new Exception('myerror template:'.$file.' doesn\'t exist');
+			}
+			$this->debug = $debug;
+			/**
+			 * E_WARNING
+			 * 
+			 */
+			set_error_handler([$this, 'customError']);
+			set_exception_handler([$this, 'customException']);
+			register_shutdown_function([$this, 'parseError']);
+
+			$this->log = new Log($path, $rule);	
+		} catch(Exception $e) {
+			echo $e->getMessage();
+		}
 
 	}	
 
