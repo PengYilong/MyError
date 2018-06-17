@@ -32,10 +32,9 @@ class MyError
 			 * E_WARNING
 			 * 
 			 */
+			register_shutdown_function([$this, 'parseError']);
 			set_error_handler([$this, 'customError']);
 			set_exception_handler([$this, 'customException']);
-			register_shutdown_function([$this, 'parseError']);
-
 			$this->log = new Log($path, $rule);	
 		} catch(Exception $e) {
 			echo $e->getMessage();
@@ -65,10 +64,22 @@ class MyError
 	public function parseError()
 	{
 		if( $error = error_get_last() ) {
-			$error['function'] = __FUNCTION__;
-			// clear error
-			ob_end_clean();
-			$this->execution($error);
+			switch ($error['type']) {
+				case E_PARSE:
+				case E_ERROR:
+				case E_CORE_ERROR:
+				case E_CORE_WARNING:
+				case E_COMPILE_ERROR:
+					$error['function'] = __FUNCTION__;
+					// clear error
+					// ob_end_clean();
+					$this->execution($error);
+					break;
+				
+				default:
+					# code...
+					break;
+			}
 		}
 	}
 
