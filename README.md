@@ -1,17 +1,17 @@
-paging of php
+MyError
 ====
 
 ## Installation
 
 Use [composer](http://getcomposer.org) to install nezumi/myerror in your project:
 ```
-composer require nezumi/myerror
+composer require nezimi/myerror
 ```
 
 
 ## Usage
 ```php
-use Nezumi\MyError;
+use Nezimi\MyError;
 
 new MyError();
 

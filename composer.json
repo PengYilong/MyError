@@ -1,5 +1,5 @@
 {
-    "name": "nezumi/myerror",
+    "name": "nezimi/myerror",
     "description": "php error and exception",
     "require": {
 		"php": ">=5.4"

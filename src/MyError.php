@@ -20,12 +20,12 @@ class MyError
 	 */
 	protected $log;
 
-	public function __construct($path, $rule, $file = './template/error.php', $debug = 1)
+	public function __construct($path, $rule, $file = __DIR__.'/../template/error.php', $debug = true)
 	{
 		$this->file = $file;
 		try{
 			if( !file_exists($file) ){
-				throw new Exception('myerror template:'.$file.' doesn\'t exist');
+				throw new Exception('myerror template:' . $file . ' doesn\'t exist');
 			}
 			$this->debug = $debug;
 			/**
@@ -42,6 +42,9 @@ class MyError
 
 	}	
 
+	/**
+	 * Error Handler
+	 */
 	public function  customError($errno , $errstr, $errfile, $errline)
 	{
 		$error['function'] = __FUNCTION__;
@@ -51,6 +54,9 @@ class MyError
 		$this->execution($error);	
 	}
 
+	/**
+	 * Exception Handler
+	 */
 	public function customException($exception)
 	{
 		$error['function'] = __FUNCTION__;
@@ -61,6 +67,9 @@ class MyError
 		$this->execution($error);
 	}
 
+	/**
+	 * Shutdown Handler 
+	 */
 	public function parseError()
 	{
 		if( $error = error_get_last() ) {
@@ -86,6 +95,9 @@ class MyError
 	public function execution($error)
 	{
 		if( $this->debug ){
+			include __DIR__.'/../template/header.php';
+			include __DIR__.'/../css/normalize.css';
+			include __DIR__.'/../css/error.css';
 			include $this->file;
 		} 
 		$this->log->write($error['message']);

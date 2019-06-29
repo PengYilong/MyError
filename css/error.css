@@ -1,25 +1,15 @@
-@charset "UTF-8";
 body {
   background: #fff;
-  font-family: '微软雅黑';
-  color: #333;
-  font-size: 16px; }
+  color: #333; }
 
 .error {
   padding: 24px 48px; }
   .error .face {
-    font-size: 70px;
-    font-weight: normal; }
+    font-size: 70px; }
   .error .message {
-    font-size: 32px;
-    margin-bottom: 15px;
-    margin-top: 12px; }
-  .error .content .info {
-    margin-bottom: 12px; }
-    .error .content .info h3.title {
-      color: #000;
-      font-weight: 700;
-      font-size: 16px; }
+    font-size: 32px; }
+  .error .trace {
+    line-height: 26px; }
 
 .copyright {
   padding: 12px 48px;

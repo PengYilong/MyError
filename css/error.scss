@@ -1,35 +1,18 @@
 body {
     background: #fff;
-    font-family: '微软雅黑';
     color: #333;
-    font-size: 16px;
 }
-
-
-
 
 .error {
     padding: 24px 48px;
     .face {
         font-size: 70px;
-        font-weight: normal;
     }
     .message {
         font-size: 32px;
-        margin-bottom: 15px;
-        margin-top: 12px;
     }
-    .content {
-       .info {
-            margin-bottom: 12px;
-            h3.title {
-                color: #000;
-                font-weight: 700;
-                font-size: 16px;            
-            }
-            .text {
-            } 
-        }
+    .trace{
+        line-height: 26px; 
     }
 }
 
