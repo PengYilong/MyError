@@ -1,19 +1,21 @@
-paging of php
+my-error
 ====
 
 ## Installation
 
-Use [composer](http://getcomposer.org) to install nezumi/myerror in your project:
+Use [composer](http://getcomposer.org) to install nezmi/my-error in your project:
 ```
-composer require nezumi/myerror
+composer require nezimi/my-error
 ```
 
 
 ## Usage
 ```php
-use Nezumi\MyError;
+use Nezimi\Error;
 
-new MyError();
-
+$config = include './config/log.php';
+$path = dirname(__FILE__).'/runtime/log/';
+$rule = $config['rule'];
+new MyError($path, $rule, $file = './template/error.php');
 ```
 

@@ -1,8 +1,8 @@
 <?php
-namespace Nezumi;
+namespace Nezimi;
 use Exeception;
 
-class MyError
+class Error
 {
 
 	/**
