@@ -1,7 +1,7 @@
 <?php
 class Loader
 {
-	static $classMap = array();  //to load classes
+	static $classMap = [];  //to load classes
 
 	static function _autoload($class)
 	{
@@ -9,7 +9,7 @@ class Loader
 			return true;
 		}
 		$file = __DIR__.'/'.str_replace('\\', DIRECTORY_SEPARATOR, $class).'.php';
-		$file = str_replace('/Nezumi/', '/src/', $file);
+		$file = str_replace('/Nezimi/', '/src/', $file);
 		if( file_exists($file) ){
 			include $file;
 			self::$classMap[$class] = $class;

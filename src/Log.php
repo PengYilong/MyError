@@ -1,5 +1,5 @@
 <?php
-namespace Nezumi;
+namespace Nezimi;
 
 class Log
 {
