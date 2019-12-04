@@ -20,12 +20,14 @@ class Error
 	 */
 	protected $log;
 
-	public function __construct($path, $rule, $file = __DIR__.'/../template/error.php', $debug = true)
+	protected $path;
+
+	public function __construct($file = __DIR__.'/../template/error.php', $path = '', $rule = [],  $debug = true)
 	{
 		$this->file = $file;
 		try{
 			if( !file_exists($file) ){
-				throw new Exception('myerror template:' . $file . ' doesn\'t exist');
+				throw new Exception('the my-error template doesn\'t exist:' . $file  );
 			}
 			$this->debug = $debug;
 			/**
@@ -35,7 +37,11 @@ class Error
 			register_shutdown_function([$this, 'parseError']);
 			set_error_handler([$this, 'customError']);
 			set_exception_handler([$this, 'customException']);
-			$this->log = new Log($path, $rule);	
+
+			$this->path = $path;
+			if( !empty($path) ){
+				$this->log = new Log($path, $rule);	
+			}
 		} catch(Exception $e) {
 			echo $e->getMessage();
 		}
@@ -99,8 +105,10 @@ class Error
 			include __DIR__.'/../css/normalize.css';
 			include __DIR__.'/../css/error.css';
 			include $this->file;
-		} 
-		$this->log->write($error['message']);
+		}
+		if( !empty($path) ){ 
+			$this->log->write($error['message']);
+		}
 	}
 
 

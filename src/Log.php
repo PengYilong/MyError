@@ -50,8 +50,7 @@ class Log
 
 	public function process(&$value)
 	{
-		$value = date($value);
-		return $value;
+		date($value);
 	}
 
 	private function format($message)
