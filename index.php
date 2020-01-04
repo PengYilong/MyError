@@ -3,7 +3,7 @@ include './Loader.php';
 spl_autoload_register('Loader::_autoload');
 date_default_timezone_set('PRC');
 
-use Nezimi\Error;
+use zero\Error;
 
 $config = include './config/log.php';
 $path = dirname(__FILE__).'/runtime/log/';

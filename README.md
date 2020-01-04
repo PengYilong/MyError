@@ -1,4 +1,4 @@
-my-error
+zero-error
 ====
 
 ## Installation
@@ -11,7 +11,7 @@ composer require nezimi/my-error
 
 ## Usage
 ```php
-use Nezimi\Error;
+use zero\Error;
 
 $config = include './config/log.php';
 $path = dirname(__FILE__).'/runtime/log/';
