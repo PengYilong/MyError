@@ -3,7 +3,7 @@
 </head>
 <body>
 <div class="error">
-	<h1 class="face"><?php echo $error['function'] ?>!(^^)……WRONG</h1>
+	<h1 class="face">!(^^)……WRONG</h1>
 	<div class="message"><?php echo $error['message'] ?></div>
 	<div class="content">
 		<div class="info">

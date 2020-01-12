@@ -1,6 +1,6 @@
 <?php
 namespace zero;
-use Exeception;
+use Exception;
 
 class Error
 {
@@ -50,14 +50,18 @@ class Error
 
 	/**
 	 * Error Handler
+	 *
+	 * @param integer $errno
+	 * @param string $errstr
+	 * @param string $errfile
+	 * @param integer $errline
+	 * @param array $errcontext
+	 * @return void
 	 */
-	public function  customError($errno , $errstr, $errfile, $errline)
+	public function  customError(int $errno , string $errstr , string $errfile , int $errline , array $errcontext)
 	{
-		$error['function'] = __FUNCTION__;
-		$error['message'] = $errstr;
-		$error['file'] = $errfile;
-		$error['line'] = $errline;
-		$this->execution($error);	
+		$exception = new ErrorException($errno, $errstr, $errfile , $errline);
+		throw $exception;
 	}
 
 	/**
@@ -65,12 +69,10 @@ class Error
 	 */
 	public function customException($exception)
 	{
-		$error['function'] = __FUNCTION__;
-		$error['message'] = $exception->getMessage();
-		$error['file'] = $exception->getFile();
-		$error['line'] = $exception->getLine();
-		$error['trace'] = $exception->getTraceAsString();
-		$this->execution($error);
+		if(!$exception instanceof Exception) {
+			return 'Throwable';
+		}
+		$this->execution($exception);
 	}
 
 	/**
@@ -78,28 +80,23 @@ class Error
 	 */
 	public function parseError()
 	{
-		if( $error = error_get_last() ) {
-			switch ($error['type']) {
-				case E_PARSE:
-				case E_ERROR:
-				case E_CORE_ERROR:
-				case E_CORE_WARNING:
-				case E_COMPILE_ERROR:
-					$error['function'] = __FUNCTION__;
-					// clear error
-					// ob_end_clean();
-					$this->execution($error);
-					break;
-				
-				default:
-					# code...
-					break;
-			}
+		if( $error = error_get_last() && $this->isFatal($error['type']) ) {
+			$exception = new ErrorException($error['type'], $error['message'], $error['file'] , $error['line']);
+			$this->customException($exception);
 		}
 	}
 
-	public function execution($error)
+	protected function isFatal($type)
 	{
+		return in_array($type, [E_PARSE, E_ERROR, E_CORE_ERROR, E_CORE_WARNING, E_COMPILE_ERROR]);
+	}
+
+	public function execution($exception)
+	{
+		$error['message'] = $exception->getMessage();
+		$error['file'] = $exception->getFile();
+		$error['line'] = $exception->getLine();
+		$error['trace'] = $exception->getTraceAsString();
 		if( $this->debug ){
 			include __DIR__.'/../template/header.php';
 			include __DIR__.'/../css/normalize.css';
