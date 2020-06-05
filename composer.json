@@ -1,5 +1,5 @@
 {
-    "name": "nezimi/zero-error",
+    "name": "zero-systems/zero-error",
     "description": "dealing with php error and exception",
     "homepage": "https://github.com/PengYilong/zero-error",
     "require": {

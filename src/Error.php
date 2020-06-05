@@ -69,9 +69,6 @@ class Error
 	 */
 	public function customException($exception)
 	{
-		if(!$exception instanceof Exception) {
-			return 'Throwable';
-		}
 		$this->execution($exception);
 	}
 

@@ -1,11 +1,11 @@
-zero-error
+Zero Error
 ====
 
 ## Installation
 
-Use [composer](http://getcomposer.org) to install nezmi/my-error in your project:
+Use [composer](http://getcomposer.org) to install zero-systems/zero-error in your project:
 ```
-composer require nezimi/my-error
+composer require zero-systems/zero-error
 ```
 
 
