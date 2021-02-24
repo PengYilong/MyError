@@ -1,5 +1,5 @@
 <?php
-namespace zero;
+namespace zero\exception;
 use Exception;
 
 class ErrorException extends Exception

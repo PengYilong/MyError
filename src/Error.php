@@ -1,47 +1,35 @@
 <?php
 namespace zero;
 use Exception;
+use zero\exception\ErrorException;
+use zero\exception\Handle;
 
 class Error
 {
-
 	/**
-	 * @var boolean true debug on or flase debug off 
+	 * configs
+	 *
+	 * @var array
 	 */
-	public $debug = true;
+	public $config = [];	
 
-	/**
-	 * @var string 
-	 */
-	protected $file;
+	private $handle;
 
-	/**
-	 * @var 
-	 */
-	protected $log;
-
-	protected $path;
-
-	public function __construct($file = __DIR__.'/../template/error.php', $path = '', $rule = [],  $debug = true)
+	public function __construct(array $config)
 	{
-		$this->file = $file;
+		$this->config = $config;
+		$this->config['exception_tmpl'] = $this->config['exception_tmpl'] ?: dirname(__DIR__) . DIRECTORY_SEPARATOR . 'template' . DIRECTORY_SEPARATOR . 'error.php';
+		
 		try{
-			if( !file_exists($file) ){
-				throw new Exception('the my-error template doesn\'t exist:' . $file  );
+			if( !file_exists($this->config['exception_tmpl']) ){
+				throw new Exception('the template doesn\'t exist:' . $file  );
 			}
-			$this->debug = $debug;
-			/**
-			 * E_WARNING
-			 * 
-			 */
-			register_shutdown_function([$this, 'parseError']);
-			set_error_handler([$this, 'customError']);
-			set_exception_handler([$this, 'customException']);
+			
+			register_shutdown_function([$this, 'appShutdown']);
+			set_error_handler([$this, 'appError']);
+			set_exception_handler([$this, 'appException']);
 
-			$this->path = $path;
-			if( !empty($path) ){
-				$this->log = new Log($path, $rule);	
-			}
+			
 		} catch(Exception $e) {
 			echo $e->getMessage();
 		}
@@ -58,7 +46,7 @@ class Error
 	 * @param array $errcontext
 	 * @return void
 	 */
-	public function  customError(int $errno , string $errstr , string $errfile , int $errline , array $errcontext)
+	public function appError(int $errno , string $errstr , string $errfile , int $errline , array $errcontext)
 	{
 		$exception = new ErrorException($errno, $errstr, $errfile , $errline);
 		throw $exception;
@@ -67,19 +55,20 @@ class Error
 	/**
 	 * Exception Handler
 	 */
-	public function customException($exception)
+	public function appException($exception)
 	{
-		$this->execution($exception);
+		$exceptionHandle = $this->getExceptionHandler(); 
+		$exceptionHandle->render($exception);
 	}
 
 	/**
 	 * Shutdown Handler 
 	 */
-	public function parseError()
-	{
+	public function appShutdown()
+	{	
 		if( $error = error_get_last() && $this->isFatal($error['type']) ) {
 			$exception = new ErrorException($error['type'], $error['message'], $error['file'] , $error['line']);
-			$this->customException($exception);
+			$this->appException($exception);
 		}
 	}
 
@@ -88,22 +77,17 @@ class Error
 		return in_array($type, [E_PARSE, E_ERROR, E_CORE_ERROR, E_CORE_WARNING, E_COMPILE_ERROR]);
 	}
 
-	public function execution($exception)
+	/**
+	 * Get an instance of the exception handler
+	 *
+	 * @return void
+	 */
+	public function getExceptionHandler()
 	{
-		$error['message'] = $exception->getMessage();
-		$error['file'] = $exception->getFile();
-		$error['line'] = $exception->getLine();
-		$error['trace'] = $exception->getTraceAsString();
-		if( $this->debug ){
-			include __DIR__.'/../template/header.php';
-			include __DIR__.'/../css/normalize.css';
-			include __DIR__.'/../css/error.css';
-			include $this->file;
+		if( !$this->handle instanceof Handle ) {
+			$this->handle = new Handle($this->config);
 		}
-		if( !empty($path) ){ 
-			$this->log->write($error['message']);
-		}
+		return $this->handle;
 	}
-
 
 }
