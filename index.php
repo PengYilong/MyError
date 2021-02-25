@@ -5,9 +5,12 @@ date_default_timezone_set('PRC');
 
 use zero\Error;
 
-$config = include './config/log.php';
-$path = dirname(__FILE__).'/runtime/log/';
-new Error($path, $rule, $file = './template/error.php');
+$config = [
+    'exception_tmpl' => '',
+    // true debug on or flase debug off 
+    'debug' => false,
+];
+new Error($config);;
 // throw new Exception('throw a Exception');
 $test = new  principle\testA();
 $test->index();

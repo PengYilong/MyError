@@ -1,8 +1,10 @@
 <?php
 namespace zero;
+
 use Exception;
 use zero\exception\ErrorException;
 use zero\exception\Handle;
+use zero\exception\ThrowableError;
 
 class Error
 {
@@ -22,13 +24,12 @@ class Error
 		
 		try{
 			if( !file_exists($this->config['exception_tmpl']) ){
-				throw new Exception('the template doesn\'t exist:' . $file  );
+				throw new Exception('The template doesn\'t exist:' . $file  );
 			}
 			
 			register_shutdown_function([$this, 'appShutdown']);
 			set_error_handler([$this, 'appError']);
 			set_exception_handler([$this, 'appException']);
-
 			
 		} catch(Exception $e) {
 			echo $e->getMessage();
@@ -57,7 +58,11 @@ class Error
 	 */
 	public function appException($exception)
 	{
-		$exceptionHandle = $this->getExceptionHandler(); 
+		if( !$exception instanceof Exception ) {
+			$exception = new ThrowableError($exception);
+		}
+
+		$exceptionHandle = $this->getExceptionHandler();
 		$exceptionHandle->render($exception);
 	}
 
