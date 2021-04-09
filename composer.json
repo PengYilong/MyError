@@ -3,7 +3,7 @@
     "description": "dealing with php error and exception",
     "homepage": "https://github.com/PengYilong/zero-error",
     "require": {
-		"php": ">=7.1.0"
+		"php": ">=7.0"
     },
     "authors": [
         {

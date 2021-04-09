@@ -20,13 +20,9 @@ class Error
 	public function __construct(array $config)
 	{
 		$this->config = $config;
-		$this->config['exception_tmpl'] = $this->config['exception_tmpl'] ?: dirname(__DIR__) . DIRECTORY_SEPARATOR . 'template' . DIRECTORY_SEPARATOR . 'error.php';
-		
-		try{
-			if( !file_exists($this->config['exception_tmpl']) ){
-				throw new Exception('The template doesn\'t exist:' . $file  );
-			}
-			
+
+		try{			
+
 			register_shutdown_function([$this, 'appShutdown']);
 			set_error_handler([$this, 'appError']);
 			set_exception_handler([$this, 'appException']);
@@ -58,12 +54,14 @@ class Error
 	 */
 	public function appException($exception)
 	{
+		
 		if( !$exception instanceof Exception ) {
 			$exception = new ThrowableError($exception);
 		}
 
 		$exceptionHandle = $this->getExceptionHandler();
-		$exceptionHandle->render($exception);
+		$renderRes = $exceptionHandle->render($exception);
+		return $renderRes->send();
 	}
 
 	/**
@@ -71,7 +69,8 @@ class Error
 	 */
 	public function appShutdown()
 	{	
-		if( $error = error_get_last() && $this->isFatal($error['type']) ) {
+		$error = error_get_last();
+		if( $error && $this->isFatal($error['type']) ) {
 			$exception = new ErrorException($error['type'], $error['message'], $error['file'] , $error['line']);
 			$this->appException($exception);
 		}
@@ -89,9 +88,17 @@ class Error
 	 */
 	public function getExceptionHandler()
 	{
-		if( !$this->handle instanceof Handle ) {
+		$class = $this->config['exception_handle'];
+		if( $class && class_exists($class) && is_subclass_of($class, 'zero\\exception\\Handle') ) {
+			$this->handle = new $class($this->config);
+		} else  {
+			$this->config['exception_tmpl'] = $this->config['exception_tmpl'] ?: dirname(__DIR__) . DIRECTORY_SEPARATOR . 'template' . DIRECTORY_SEPARATOR . 'error.php';
+			if( !file_exists($this->config['exception_tmpl']) ){
+				throw new Exception('The template doesn\'t exist:' . $file  );
+			}
 			$this->handle = new Handle($this->config);
 		}
+
 		return $this->handle;
 	}
 
