@@ -28,7 +28,7 @@ class Error
 			set_exception_handler([$this, 'appException']);
 			
 		} catch(Exception $e) {
-			echo $e->getMessage();
+			throw new Exception($e->getMessage(), 0);
 		}
 
 	}	
@@ -54,7 +54,6 @@ class Error
 	 */
 	public function appException($exception)
 	{
-		
 		if( !$exception instanceof Exception ) {
 			$exception = new ThrowableError($exception);
 		}
@@ -94,7 +93,7 @@ class Error
 		} else  {
 			$this->config['exception_tmpl'] = $this->config['exception_tmpl'] ?: dirname(__DIR__) . DIRECTORY_SEPARATOR . 'template' . DIRECTORY_SEPARATOR . 'error.php';
 			if( !file_exists($this->config['exception_tmpl']) ){
-				throw new Exception('The template doesn\'t exist:' . $file  );
+				throw new Exception('The template doesn\'t exist:' . $file  , 0);
 			}
 			$this->handle = new Handle($this->config);
 		}

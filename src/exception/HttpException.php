@@ -12,5 +12,6 @@ class HttpException extends \RuntimeException
         $this->statusCode = $statusCode;
         $this->headers = $headers;
         $this->message = $message;
+        $this->code = $statusCode;
     }    
 }

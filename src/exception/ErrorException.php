@@ -9,5 +9,6 @@ class ErrorException extends Exception
         $this->file = $errfile;
         $this->line = $errline;
         $this->message = $errstr;
+        $this->code = 0;
     }
 }
